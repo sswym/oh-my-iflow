@@ -1,0 +1,45 @@
+description = "Run the full omi staged team pipeline for a complex task."
+prompt = """
+Coordinate the request with omi agents.
+
+Task:
+$ARGUMENTS
+
+Execution protocol (staged):
+1. `team-plan`: Delegate decomposition to `omi-planner` and architecture checks to `omi-architect`.
+2. `team-prd`: Delegate scope lock and acceptance criteria to `omi-product`.
+3. `team-exec`: Delegate implementation slices to `omi-executor`.
+4. `team-verify`: Delegate validation to `omi-reviewer` and `omi-verifier`.
+5. `team-fix`: If verification fails, delegate root-cause and patches to `omi-debugger` + `omi-executor`.
+6. Repeat steps 3-5 until acceptance criteria pass or blockers are explicit.
+7. Return one merged lifecycle report.
+
+State handling:
+- If filesystem tools are available, update `.omi/state/workflow.md` with stage status and open blockers.
+- Keep verification evidence concise (tests, checks, reasoning).
+
+Final report format:
+## Pipeline Summary
+- Active mode:
+- Current stage:
+- Completion status:
+
+## Team Plan
+- ...
+
+## Stage Results
+- team-plan:
+- team-prd:
+- team-exec:
+- team-verify:
+- team-fix:
+
+## Work Completed
+- ...
+
+## Validation
+- ...
+
+## Open Items
+- ...
+"""

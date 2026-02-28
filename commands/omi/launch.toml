@@ -1,0 +1,32 @@
+description = "Initialize a persistent omi workflow lifecycle and start staged execution."
+prompt = """
+Launch omi workflow lifecycle.
+
+Task:
+$ARGUMENTS
+
+Launch protocol:
+1. Initialize lifecycle metadata (mode, objective, acceptance criteria, owner assumptions).
+2. If filesystem tools are available, create/update:
+   - `.omi/state/workflow.md`
+   - `.omi/state/checkpoint.md`
+   - `.omi/state/hud.json` (create default `visibility=normal` only if missing)
+3. Run `team-plan` then `team-prd`.
+4. Start first execution slice (`team-exec`) only when scope is clear.
+5. Report current stage and resume command.
+
+Output format:
+## Lifecycle
+- status: launched
+- active mode:
+- current stage:
+
+## Initialized State
+- ...
+
+## First Execution Slice
+- ...
+
+## Resume
+- next command:
+"""

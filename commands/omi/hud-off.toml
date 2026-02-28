@@ -1,0 +1,20 @@
+description = "Quick toggle: set omi HUD visibility profile to hidden."
+prompt = """
+Set omi HUD visibility profile to `hidden`.
+
+Protocol:
+1. Apply `visibility = hidden`.
+2. If filesystem tools are available, write/update `.omi/state/hud.json` with source `omi:hud-off`.
+3. Confirm that future `/omi:status` calls should avoid visual HUD code blocks.
+
+Output format:
+## HUD
+- applied: hidden
+- persisted:
+
+## Effect
+- `/omi:status` should return plain sections without HUD code block.
+
+## Next Command
+- /omi:status
+"""
