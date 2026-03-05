@@ -2,6 +2,9 @@
 
 **基于多智能体工作流的智能命令行工具**
 
+- **当前仓库**: https://github.com/hubo1989/oh-my-iflow
+- **上游仓库**: https://github.com/sswym/oh-my-iflow
+
 ---
 - 添加[lsp-mcp](https://github.com/jonrad/lsp-mcp)，添加python、go、rust等语言的lsp支持
 - 添加一键安装脚本 install.sh 可选择全局安装与项目安装，安装前记得备份
@@ -74,15 +77,141 @@ team-plan → team-prd → team-exec → team-verify → team-fix
 
 ## 🚀 快速开始
 
-### 安装
+### 安装前准备
+
+1. **确保已安装 iFLOW CLI**：oh-my-iflow 是 iFLOW CLI 的扩展插件，需要先安装 iFLOW CLI
+2. **备份现有配置**（可选但推荐）：如果你已经有 `~/.iflow` 目录，建议先备份
+   ```bash
+   cp -r ~/.iflow ~/.iflow.backup
+   ```
+3. **安装依赖工具**（可选）：
+   - `jq`：用于自动合并 JSON 配置（macOS: `brew install jq`，Ubuntu: `apt-get install jq`）
+
+### 安装步骤
+
+#### 方式一：全局安装（推荐）
+
+全局安装会将配置应用到 `~/.iflow` 目录，所有项目都可以使用这些命令。
+
+**macOS / Linux:**
 
 ```bash
-# 克隆仓库
-git clone https://github.com/your-username/oh-my-iflow.git
+# 1. 克隆仓库
+git clone https://github.com/hubo1989/oh-my-iflow.git
 cd oh-my-iflow
 
-# 确保已安装 iFLOW CLI
-# 将项目配置添加到 iFLOW CLI 中
+# 2. 执行全局安装脚本
+bash install.sh --global
+
+# 3. 验证安装
+ls ~/.iflow/commands/omi/
+```
+
+**Windows (PowerShell):**
+
+```powershell
+# 1. 克隆仓库
+git clone https://github.com/hubo1989/oh-my-iflow.git
+cd oh-my-iflow
+
+# 2. 手动复制目录到用户目录
+# 注意：Windows 需要使用手动安装方式（见下方）
+```
+
+#### 方式二：本地安装
+
+本地安装会将配置应用到当前项目的 `.iflow` 目录，仅当前项目可用。
+
+**macOS / Linux:**
+
+```bash
+# 1. 克隆仓库到项目目录（或复制 install.sh 到项目）
+git clone https://github.com/hubo1989/oh-my-iflow.git /tmp/oh-my-iflow
+
+# 2. 在项目根目录执行本地安装
+cd /path/to/your/project
+bash /tmp/oh-my-iflow/install.sh --local
+
+# 3. 验证安装
+ls .iflow/commands/omi/
+```
+
+#### 方式三：手动安装（适用于所有系统）
+
+如果自动安装脚本无法运行，可以手动复制文件：
+
+**macOS / Linux:**
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/hubo1989/oh-my-iflow.git
+cd oh-my-iflow
+
+# 2. 创建目标目录
+mkdir -p ~/.iflow
+
+# 3. 复制所有目录
+cp -r agents ~/.iflow/
+cp -r commands ~/.iflow/
+cp -r context ~/.iflow/
+cp -r skills ~/.iflow/
+cp -r mcp ~/.iflow/
+
+# 4. 手动添加 MCP 配置到 ~/.iflow/settings.json（如果不存在）
+# 配置内容参考 install.sh 中的 mcp_config 变量
+```
+
+**Windows (手动安装):**
+
+```powershell
+# 1. 克隆仓库
+git clone https://github.com/hubo1989/oh-my-iflow.git
+cd oh-my-iflow
+
+# 2. 创建目标目录
+New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.iflow"
+
+# 3. 复制所有目录
+Copy-Item -Recurse -Force agents "$env:USERPROFILE\.iflow\"
+Copy-Item -Recurse -Force commands "$env:USERPROFILE\.iflow\"
+Copy-Item -Recurse -Force context "$env:USERPROFILE\.iflow\"
+Copy-Item -Recurse -Force skills "$env:USERPROFILE\.iflow\"
+Copy-Item -Recurse -Force mcp "$env:USERPROFILE\.iflow\"
+
+# 4. 手动编辑 settings.json 添加 MCP 配置
+```
+
+### 安装验证
+
+安装完成后，可以通过以下方式验证：
+
+```bash
+# 1. 检查目录结构
+ls ~/.iflow/commands/omi/  # 应该看到 team.toml, autopilot.toml 等文件
+
+# 2. 检查智能体配置
+ls ~/.iflow/agents/  # 应该看到 architect.md, planner.md 等文件
+
+# 3. 在 iFLOW CLI 中测试命令
+# 启动 iFLOW CLI 后，输入以下命令测试：
+# /omi:status
+# /omi:team 测试任务
+```
+
+### 卸载
+
+如果需要卸载：
+
+```bash
+# 全局安装卸载
+rm -rf ~/.iflow/agents
+rm -rf ~/.iflow/commands
+rm -rf ~/.iflow/context
+rm -rf ~/.iflow/skills
+rm -rf ~/.iflow/mcp
+
+# 本地安装卸载
+rm -rf .iflow
 ```
 
 ### 基本使用
