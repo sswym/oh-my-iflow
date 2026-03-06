@@ -7,7 +7,7 @@
 
 ---
 ## 更新
-### 2026-03-07同步上游更新
+### 2026-03-06同步上游更新
 ```bash
 /omi:team-assemble 请帮我完全复刻这个页面：https://cli.iflow.cn/?spm=3e711c3f.2ef5001f.0.0.3d8173e8mb1HSX
 ```
