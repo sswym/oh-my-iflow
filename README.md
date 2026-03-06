@@ -7,6 +7,7 @@
 
 ---
 ## 更新
+### 2026-03-06
 - 优化安装脚本install.sh
 - 删除lsp-mcp，采用[cli-lsp-cient](https://github.com/eli0shin/cli-lsp-client) 增加rust语言支持
 - 增加python、rust、go、shell、以及前端语言文件的自动识别格式化功能。
@@ -338,3 +339,4 @@ oh-my-iflow/
 🙏 致谢
 
 感谢 oh-my-gemini-cli 项目提供的优秀基础。
+
