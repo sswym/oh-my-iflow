@@ -1,0 +1,14 @@
+   {
+     "servers": [
+       {
+         "id": "rust_analyzer",
+         "extensions": [".rs"],
+         "rootPatterns": ["Cargo.toml", "rust-project.json"],
+         "command": ["rust-analyzer"],
+         "env": {}
+       }
+     ],
+     "languageExtensions": {
+       ".rs": "rust"
+     }
+   }
