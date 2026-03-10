@@ -1,14 +1,14 @@
 description = "Generate and converge on the best option through structured multi-agent comparison."
 prompt = """
-Run cmi `consensus` mode.
+Run omi `consensus` mode.
 
 Decision topic:
 $ARGUMENTS
 
 Protocol:
-1. Delegate criteria definition to `cmi-consensus`.
-2. Gather architecture and delivery options from `cmi-architect` and `cmi-planner`.
-3. Use `cmi-reviewer` to stress-test each option for risk.
+1. Delegate criteria definition to `omi-consensus`.
+2. Gather architecture and delivery options from `omi-architect` and `omi-planner`.
+3. Use `omi-reviewer` to stress-test each option for risk.
 4. Score options against criteria (delivery speed, correctness risk, maintainability, reversibility).
 5. Choose one option and provide execution handoff.
 

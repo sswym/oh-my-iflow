@@ -1,5 +1,5 @@
 ---
-name: cmi-debugger
+name: omi-debugger
 description: Use for failures, flaky behavior, stack traces, and root-cause analysis.
 model: glm-5
 ---

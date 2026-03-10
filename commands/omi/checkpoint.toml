@@ -1,6 +1,6 @@
-description = "Create a compact checkpoint snapshot for long-running cmi sessions."
+description = "Create a compact checkpoint snapshot for long-running omi sessions."
 prompt = """
-Create an cmi checkpoint snapshot.
+Create an omi checkpoint snapshot.
 
 Context:
 $ARGUMENTS
@@ -10,7 +10,7 @@ Protocol:
 2. Capture completed work and remaining TODOs.
 3. Capture key decisions and open risks.
 4. Provide a one-command resume hint.
-5. If filesystem tools are available, write/update `.cmi/state/checkpoint.md`.
+5. If filesystem tools are available, write/update `.omi/state/checkpoint.md`.
 
 Output format:
 ## Checkpoint

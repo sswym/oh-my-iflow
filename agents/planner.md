@@ -1,5 +1,5 @@
 ---
-name: cmi-planner
+name: omi-planner
 description: Use to break a request into ordered phases, tasks, and validation checkpoints.
 model: glm-5
 ---

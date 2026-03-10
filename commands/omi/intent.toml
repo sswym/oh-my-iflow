@@ -1,6 +1,6 @@
-description = "Run a task intent gate to classify the request and route to the right cmi stage/command."
+description = "Run a task intent gate to classify the request and route to the right omi stage/command."
 prompt = """
-Run cmi `intent` gate.
+Run omi `intent` gate.
 
 Input:
 $ARGUMENTS
@@ -16,17 +16,17 @@ Protocol:
    - lifecycle
 2. Identify missing constraints or acceptance criteria needed before execution.
 3. Detect command-intent mismatch (for example, implementation request but planning stage is missing).
-4. Recommend the next cmi command and agent handoff.
-5. If filesystem tools are available, write/update `.cmi/state/intent.md`.
+4. Recommend the next omi command and agent handoff.
+5. If filesystem tools are available, write/update `.omi/state/intent.md`.
 
 Routing hints:
-- planning ambiguity -> `/cmi:team-plan`
-- scope ambiguity -> `/cmi:team-prd`
-- implementation-ready -> `/cmi:team-exec`
-- validation request -> `/cmi:team-verify`
-- defect-only fix -> `/cmi:team-fix`
+- planning ambiguity -> `/omi:team-plan`
+- scope ambiguity -> `/omi:team-prd`
+- implementation-ready -> `/omi:team-exec`
+- validation request -> `/omi:team-verify`
+- defect-only fix -> `/omi:team-fix`
 - option research -> `$research`
-- mode/lifecycle operations -> `/cmi:mode`, `/cmi:launch`, `/cmi:checkpoint`, `/cmi:stop`
+- mode/lifecycle operations -> `/omi:mode`, `/omi:launch`, `/omi:checkpoint`, `/omi:stop`
 
 Output format:
 ## Intent Gate

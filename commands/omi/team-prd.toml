@@ -1,12 +1,12 @@
 description = "Stage 2/5: Lock scope with PRD-quality acceptance criteria and delivery constraints."
 prompt = """
-Run cmi `team-prd`.
+Run omi `team-prd`.
 
 Task:
 $ARGUMENTS
 
 Protocol:
-1. Delegate scope definition to `cmi-product`.
+1. Delegate scope definition to `omi-product`.
 2. Convert user intent into measurable acceptance criteria.
 3. Explicitly define non-goals to prevent scope creep.
 4. Document constraints (compatibility, timeline, dependencies, risk limits).

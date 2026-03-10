@@ -1,6 +1,6 @@
-description = "Inspect or configure cmi hook pipeline profiles, triggers, and safety policy."
+description = "Inspect or configure omi hook pipeline profiles, triggers, and safety policy."
 prompt = """
-Run cmi hook pipeline manager.
+Run omi hook pipeline manager.
 
 Input:
 $ARGUMENTS
@@ -35,7 +35,7 @@ Protocol:
    - timeout budget per lane
    - cooldown after repeated failures
 6. Enforce team-safety: side-effect hooks must be disabled in delegated sub-agent turns unless user explicitly allows them.
-7. If filesystem tools are available, write/update `.cmi/state/hooks.json`.
+7. If filesystem tools are available, write/update `.omi/state/hooks.json`.
 
 Suggested `hooks.json` shape:
 {
@@ -58,7 +58,7 @@ Suggested `hooks.json` shape:
     "disable_side_effects_for_worker_sessions": true
   },
   "updated_at": "<ISO-8601>",
-  "source": "cmi:hooks"
+  "source": "omi:hooks"
 }
 
 Output format:

@@ -25,7 +25,7 @@ Use this skill to keep momentum on complex tasks without manual stage prompting 
 
 - Default max cycles: 5 unless user overrides.
 - Do not hide blockers or failed verification.
-- Use `$cancel` or `/cmi:stop` for graceful stop.
+- Use `$cancel` or `/omi:stop` for graceful stop.
 
 ## Output Template
 

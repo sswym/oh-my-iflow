@@ -1,6 +1,6 @@
-description = "Validate cmi hook trigger graph, ordering, and safety constraints."
+description = "Validate omi hook trigger graph, ordering, and safety constraints."
 prompt = """
-Run cmi hook validation.
+Run omi hook validation.
 
 Input:
 $ARGUMENTS
@@ -14,7 +14,7 @@ Validation checklist:
    - side-effect hooks disabled in worker/delegated sessions
    - high-risk hooks require explicit user confirmation context
 6. Report failures by severity (`critical`, `major`, `minor`).
-7. If filesystem tools are available, write/update `.cmi/state/hooks-validation.md`.
+7. If filesystem tools are available, write/update `.omi/state/hooks-validation.md`.
 
 Output format:
 ## Validation Result

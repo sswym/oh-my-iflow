@@ -1,13 +1,13 @@
 description = "Stage 3/5: Implement approved plan slices with controlled scope and validation notes."
 prompt = """
-Run cmi `team-exec`.
+Run omi `team-exec`.
 
 Task:
 $ARGUMENTS
 
 Protocol:
 1. Confirm current accepted scope from `team-prd`.
-2. Delegate implementation to `cmi-executor`.
+2. Delegate implementation to `omi-executor`.
 3. Keep each execution slice small and reviewable.
 4. Record changed files and rationale.
 5. Include checks/tests performed for this slice.

@@ -1,6 +1,6 @@
-description = "Bootstrap cmi hook scaffolding and default event policy files."
+description = "Bootstrap omi hook scaffolding and default event policy files."
 prompt = """
-Initialize cmi hooks.
+Initialize omi hooks.
 
 Task context:
 $ARGUMENTS
@@ -8,11 +8,11 @@ $ARGUMENTS
 Bootstrap protocol:
 1. Create a default hook profile (`balanced`) with deterministic event lanes.
 2. If filesystem tools are available, create/update:
-   - `.cmi/state/hooks.json`
-   - `.cmi/hooks/README.md`
-   - `.cmi/hooks/plugins/safety.md`
-   - `.cmi/hooks/plugins/quality.md`
-   - `.cmi/hooks/plugins/optimization.md`
+   - `.omi/state/hooks.json`
+   - `.omi/hooks/README.md`
+   - `.omi/hooks/plugins/safety.md`
+   - `.omi/hooks/plugins/quality.md`
+   - `.omi/hooks/plugins/optimization.md`
 3. Document plugin contract for runtime adapters:
    - `onHookEvent(event, sdk)`
    - `event` envelope: `event`, `source`, `session_id`, `task_id`, `metadata`
@@ -21,7 +21,7 @@ Bootstrap protocol:
    - side-effect hooks off for worker sessions
    - fail-open for non-critical lanes (`P2-optimization`)
    - fail-closed for explicit safety violations (`P0-safety`)
-5. Recommend immediate validation with `/cmi:hooks-validate`.
+5. Recommend immediate validation with `/omi:hooks-validate`.
 
 Output format:
 ## Hook Bootstrap
@@ -37,5 +37,5 @@ Output format:
 - ...
 
 ## Next Command
-- /cmi:hooks-validate
+- /omi:hooks-validate
 """

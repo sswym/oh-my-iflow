@@ -1,6 +1,6 @@
-description = "Inspect or set cmi operating mode/profile (balanced, speed, deep, autopilot, ralph, ultrawork)."
+description = "Inspect or set omi operating mode/profile (balanced, speed, deep, autopilot, ralph, ultrawork)."
 prompt = """
-Run cmi mode manager.
+Run omi mode manager.
 
 Input:
 $ARGUMENTS
@@ -15,7 +15,7 @@ Mode behavior:
    - `ralph`
    - `ultrawork`
 3. Produce profile settings for planning depth, execution pace, and verification strictness.
-4. If filesystem tools are available, write/update `.cmi/state/mode.json`.
+4. If filesystem tools are available, write/update `.omi/state/mode.json`.
 
 Suggested `mode.json` shape:
 {

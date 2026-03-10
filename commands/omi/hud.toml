@@ -1,6 +1,6 @@
-description = "Inspect or switch cmi HUD visibility profile (normal, compact, hidden) for visual status rendering."
+description = "Inspect or switch omi HUD visibility profile (normal, compact, hidden) for visual status rendering."
 prompt = """
-Run cmi HUD profile manager.
+Run omi HUD profile manager.
 
 Input:
 $ARGUMENTS
@@ -12,14 +12,14 @@ Protocol:
    - `compact`
    - `off` or `hidden`
 3. If no value is provided, show current HUD profile and recommended profile for this task.
-4. If filesystem tools are available, write/update `.cmi/state/hud.json`.
-5. Clarify capability boundary: iFLOW Extensions cannot patch terminal statusline hooks directly, so this profile controls how `/cmi:status` renders visual summaries.
+4. If filesystem tools are available, write/update `.omi/state/hud.json`.
+5. Clarify capability boundary: iFLOW Extensions cannot patch terminal statusline hooks directly, so this profile controls how `/omi:status` renders visual summaries.
 
 Suggested `hud.json` shape:
 {
   "visibility": "normal|compact|hidden",
   "updated_at": "<ISO-8601>",
-  "source": "cmi:hud"
+  "source": "omi:hud"
 }
 
 Output format:
@@ -30,7 +30,7 @@ Output format:
 
 ## HUD Preview
 ```text
-[cmi][MODE balanced][STAGE team-exec][TASKS 3/8][RISKS 1][NEXT /cmi:team-verify]
+[omi][MODE balanced][STAGE team-exec][TASKS 3/8][RISKS 1][NEXT /omi:team-verify]
 ```
 
 ## Notes

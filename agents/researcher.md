@@ -1,5 +1,5 @@
 ---
-name: cmi-researcher
+name: omi-researcher
 description: Use for documentation lookup, API comparisons, and evidence-based technical decisions.
 model: glm-5
 ---

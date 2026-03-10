@@ -1,6 +1,6 @@
-description = "Initialize a persistent cmi workflow lifecycle and start staged execution."
+description = "Initialize a persistent omi workflow lifecycle and start staged execution."
 prompt = """
-Launch cmi workflow lifecycle.
+Launch omi workflow lifecycle.
 
 Task:
 $ARGUMENTS
@@ -8,9 +8,9 @@ $ARGUMENTS
 Launch protocol:
 1. Initialize lifecycle metadata (mode, objective, acceptance criteria, owner assumptions).
 2. If filesystem tools are available, create/update:
-   - `.cmi/state/workflow.md`
-   - `.cmi/state/checkpoint.md`
-   - `.cmi/state/hud.json` (create default `visibility=normal` only if missing)
+   - `.omi/state/workflow.md`
+   - `.omi/state/checkpoint.md`
+   - `.omi/state/hud.json` (create default `visibility=normal` only if missing)
 3. Run `team-plan` then `team-prd`.
 4. Start first execution slice (`team-exec`) only when scope is clear.
 5. Report current stage and resume command.

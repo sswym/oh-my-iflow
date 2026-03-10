@@ -1,6 +1,6 @@
 description = "Run deep repository initialization to create durable project-map context for long sessions."
 prompt = """
-Run cmi `deep-init`.
+Run omi `deep-init`.
 
 Objective:
 $ARGUMENTS
@@ -12,9 +12,9 @@ Protocol:
 4. Record validation commands and known constraints before coding.
 5. Do not implement features in this step unless explicitly asked.
 6. If filesystem tools are available, create/update:
-   - `.cmi/state/deep-init.md`
-   - `.cmi/state/project-map.md`
-   - `.cmi/state/validation.md`
+   - `.omi/state/deep-init.md`
+   - `.omi/state/project-map.md`
+   - `.omi/state/validation.md`
 
 Output format:
 ## Deep Init Summary
@@ -30,5 +30,5 @@ Output format:
 - ...
 
 ## Recommended Next Command
-- `/cmi:intent` or `/cmi:team-plan`
+- `/omi:intent` or `/omi:team-plan`
 """

@@ -149,4 +149,6 @@ coverage/
 .tern-port
 .history/
 
-.iflow
+.iflow/
+AGENTS.md
+test/

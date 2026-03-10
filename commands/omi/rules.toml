@@ -1,6 +1,6 @@
-description = "Apply conditional cmi rule packs based on task and context triggers."
+description = "Apply conditional omi rule packs based on task and context triggers."
 prompt = """
-Run cmi `rules` injector.
+Run omi `rules` injector.
 
 Input:
 $ARGUMENTS
@@ -9,7 +9,7 @@ Protocol:
 1. Detect task triggers from request text and changed-file context.
 2. Activate only relevant rule packs.
 3. Explain each active rule and expected behavior.
-4. Persist active rules when filesystem tools are available (`.cmi/state/rules.md`).
+4. Persist active rules when filesystem tools are available (`.omi/state/rules.md`).
 
 Rule pack matrix:
 - `tests-required`: activate when behavior code changes.

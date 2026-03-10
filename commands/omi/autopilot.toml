@@ -1,6 +1,6 @@
 description = "Run autonomous staged execution loops until acceptance passes or a blocker is reached."
 prompt = """
-Run cmi `autopilot` mode.
+Run omi `autopilot` mode.
 
 Objective:
 $ARGUMENTS
@@ -13,7 +13,7 @@ Autopilot protocol:
 5. Default max cycles: 5 (override only if user explicitly requests).
 
 State handling:
-- If filesystem tools are available, update `.cmi/state/workflow.md` and `.cmi/state/checkpoint.md`.
+- If filesystem tools are available, update `.omi/state/workflow.md` and `.omi/state/checkpoint.md`.
 - Include mode and cycle count in the state summary.
 
 Output format:

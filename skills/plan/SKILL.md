@@ -44,5 +44,5 @@ Use this skill when the request is non-trivial and should be planned before edit
 
 ## Notes
 
-- Delegate architecture tradeoffs to `cmi-architect` when needed.
+- Delegate architecture tradeoffs to `omi-architect` when needed.
 - Keep plans executable and testable, not abstract.

@@ -1,15 +1,15 @@
 description = "Gracefully stop active autonomous workflow and produce resume-ready handoff."
 prompt = """
-Stop active cmi autonomous workflow.
+Stop active omi autonomous workflow.
 
 Context:
 $ARGUMENTS
 
 Protocol:
-1. Determine active mode/lifecycle state from context or `.cmi/state/*` if available.
+1. Determine active mode/lifecycle state from context or `.omi/state/*` if available.
 2. Mark workflow as stopped (do not discard progress).
 3. Summarize completed work, open TODOs, blockers, and next safe resume step.
-4. If filesystem tools are available, update `.cmi/state/checkpoint.md`.
+4. If filesystem tools are available, update `.omi/state/checkpoint.md`.
 
 Output format:
 ## Lifecycle

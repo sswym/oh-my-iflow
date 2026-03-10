@@ -1,6 +1,6 @@
 ---
 name : "team"
-description : "Coordinate the full cmi stage pipeline across sub-agents for complex delivery (plan -> prd -> exec -> verify -> fix)."
+description : "Coordinate the full omi stage pipeline across sub-agents for complex delivery (plan -> prd -> exec -> verify -> fix)."
 ---
 
 ## Purpose
@@ -15,11 +15,11 @@ Use this skill for complex work that benefits from role-based delegation.
 
 ## Workflow
 
-1. Run `team-plan` with `cmi-planner` and `cmi-architect`.
-2. Run `team-prd` with `cmi-product` to lock acceptance criteria.
-3. Run `team-exec` with `cmi-executor`.
-4. Run `team-verify` with `cmi-reviewer` and `cmi-verifier`.
-5. If verify fails, run `team-fix` with `cmi-debugger` and `cmi-executor`.
+1. Run `team-plan` with `omi-planner` and `omi-architect`.
+2. Run `team-prd` with `omi-product` to lock acceptance criteria.
+3. Run `team-exec` with `omi-executor`.
+4. Run `team-verify` with `omi-reviewer` and `omi-verifier`.
+5. If verify fails, run `team-fix` with `omi-debugger` and `omi-executor`.
 6. Repeat steps 3-5 until acceptance passes or blockers are explicit.
 7. Merge all stage outputs into one status report.
 

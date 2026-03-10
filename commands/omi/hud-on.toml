@@ -1,10 +1,10 @@
-description = "Quick toggle: set cmi HUD visibility profile to normal."
+description = "Quick toggle: set omi HUD visibility profile to normal."
 prompt = """
-Set cmi HUD visibility profile to `normal`.
+Set omi HUD visibility profile to `normal`.
 
 Protocol:
 1. Apply `visibility = normal`.
-2. If filesystem tools are available, write/update `.cmi/state/hud.json` with source `cmi:hud-on`.
+2. If filesystem tools are available, write/update `.omi/state/hud.json` with source `omi:hud-on`.
 3. Provide one-line HUD preview and recommended follow-up command.
 
 Output format:
@@ -14,9 +14,9 @@ Output format:
 
 ## Preview
 ```text
-[cmi][MODE balanced][STAGE team-exec][TASKS 3/8][RISKS 1][NEXT /cmi:team-verify]
+[omi][MODE balanced][STAGE team-exec][TASKS 3/8][RISKS 1][NEXT /omi:team-verify]
 ```
 
 ## Next Command
-- /cmi:status
+- /omi:status
 """

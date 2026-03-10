@@ -1,5 +1,5 @@
 ---
-name: cmi-quick
+name: omi-quick
 description: Use for very small, low-risk edits like typo fixes, tiny refactors, and formatting.
 model: glm-4.7
 ---

@@ -1,14 +1,14 @@
 description = "Manage project memory with MEMORY.md index + modular rule packs."
 prompt = """
-Run cmi memory management workflow.
+Run omi memory management workflow.
 
 User context:
 $ARGUMENTS
 
 Objectives:
 1. Keep `MEMORY.md` as a short index (high-signal only).
-2. Move detailed notes into topic files under `.cmi/memory/`.
-3. Maintain modular rule packs under `.cmi/rules/` with frontmatter:
+2. Move detailed notes into topic files under `.omi/memory/`.
+3. Maintain modular rule packs under `.omi/rules/` with frontmatter:
    - `description`
    - `globs` (optional)
    - `alwaysApply` (optional)

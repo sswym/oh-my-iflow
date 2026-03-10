@@ -1,6 +1,6 @@
 ---
 name : "intent"
-description : "Classify user intent and route work to the correct cmi stage before execution starts."
+description : "Classify user intent and route work to the correct omi stage before execution starts."
 ---
 
 ## Purpose
@@ -18,7 +18,7 @@ Use this skill as an intake gate to reduce command-stage mismatch.
 1. Classify primary intent (`plan`, `prd`, `exec`, `verify`, `fix`, `research`, `lifecycle`).
 2. Detect missing inputs required for that intent.
 3. Flag command-intent mismatch risks.
-4. Recommend exact next `/cmi:*` command or `$skill`.
+4. Recommend exact next `/omi:*` command or `$skill`.
 5. Produce a ready-to-run handoff prompt.
 
 ## Output Template

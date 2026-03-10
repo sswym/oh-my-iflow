@@ -1,6 +1,6 @@
 description = "Audit prompt-cache stability and recommend fixes."
 prompt = """
-Run a cache-focused cmi audit.
+Run a cache-focused omi audit.
 
 User context:
 $ARGUMENTS

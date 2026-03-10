@@ -1,5 +1,5 @@
 ---
-name: cmi-reviewer
+name: omi-reviewer
 description: Use for code review focused on correctness, regressions, security, and missing tests.
 model: glm-5
 ---

@@ -1,14 +1,14 @@
 description = "Stage 5/5: Fix only verified issues, then prepare the next verification pass."
 prompt = """
-Run cmi `team-fix`.
+Run omi `team-fix`.
 
 Task:
 $ARGUMENTS
 
 Protocol:
 1. Consume fix backlog from `team-verify`.
-2. Delegate root-cause analysis to `cmi-debugger`.
-3. Delegate patching to `cmi-executor` with minimal diffs.
+2. Delegate root-cause analysis to `omi-debugger`.
+3. Delegate patching to `omi-executor` with minimal diffs.
 4. Confirm which issues are resolved vs still open.
 5. Return a clear handoff for the next `team-verify`.
 

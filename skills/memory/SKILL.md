@@ -16,8 +16,8 @@ Use this skill to keep long-session memory concise, discoverable, and task-aware
 ## Workflow
 
 1. Keep `MEMORY.md` as a compact index.
-2. Store details in `.cmi/memory/*.md` topic files.
-3. Maintain rule packs in `.cmi/rules/*.md` with frontmatter.
+2. Store details in `.omi/memory/*.md` topic files.
+3. Maintain rule packs in `.omi/rules/*.md` with frontmatter.
 4. Activate only matching rules (`alwaysApply` or `globs` match).
 5. Report stale entries and propose updates.
 

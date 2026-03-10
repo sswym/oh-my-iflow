@@ -51,6 +51,25 @@ install_cli_lsp_client() {
 		return 0
 	fi
 
+	# 检查 cli-lsp-client 是否已经安装
+	if command -v cli-lsp-client &>/dev/null; then
+		echo -e "${GREEN}✓ cli-lsp-client 已安装: $(cli-lsp-client --version 2>/dev/null || echo 'version unknown')${NC}"
+		return 0
+	fi
+
+	# 检查 node_modules 是否存在（表示依赖已安装）
+	if [ -d "$cli_lsp_dir/node_modules" ]; then
+		echo -e "${GREEN}✓ cli-lsp-client 依赖已安装（node_modules 存在）${NC}"
+		# 如果 cli-lsp-client 命令不可用，可能需要创建软链接
+		if [ -f "$cli_lsp_dir/dist/cli.js" ]; then
+			echo -e "${BLUE}cli-lsp-client 命令不可用，创建软链接...${NC}"
+			ln -sf "$cli_lsp_dir/dist/cli.js" /usr/local/bin/cli-lsp-client 2>/dev/null ||
+				ln -sf "$cli_lsp_dir/dist/cli.js" "$HOME/.local/bin/cli-lsp-client" 2>/dev/null ||
+				echo -e "${YELLOW}无法创建软链接，请手动将 cli-lsp-client 添加到 PATH${NC}"
+		fi
+		return 0
+	fi
+
 	echo -e "${BLUE}安装 cli-lsp-client...${NC}"
 
 	if [ -f "$cli_lsp_dir/install.sh" ]; then

@@ -1,6 +1,6 @@
-description = "Dry-run cmi hook pipeline against simulated event sequences and report efficiency."
+description = "Dry-run omi hook pipeline against simulated event sequences and report efficiency."
 prompt = """
-Run cmi hook dry-run test.
+Run omi hook dry-run test.
 
 Scenario:
 $ARGUMENTS
@@ -22,7 +22,7 @@ Test protocol:
    - estimated time spent
    - estimated redundant-loop reduction
    - estimated token savings from early drift/blocker detection
-6. If filesystem tools are available, write/update `.cmi/state/hooks-last-test.md`.
+6. If filesystem tools are available, write/update `.omi/state/hooks-last-test.md`.
 
 Output format:
 ## Dry-Run Summary
