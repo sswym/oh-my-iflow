@@ -153,3 +153,4 @@ coverage/
 AGENTS.md
 test/
 CLAUDE.md
+.agents/
