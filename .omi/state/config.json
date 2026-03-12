@@ -1,0 +1,13 @@
+{
+  "loopLimits": {
+    "default": 5,
+    "speed": 3,
+    "deep": 10,
+    "autopilot": 5,
+    "ralph": -1
+  },
+  "stateDir": ".omi/state",
+  "memoryDir": ".omi/memory",
+  "rulesDir": ".omi/rules",
+  "hooksDir": ".omi/hooks"
+}

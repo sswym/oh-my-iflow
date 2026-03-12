@@ -23,7 +23,7 @@ Use this skill to keep momentum on complex tasks without manual stage prompting 
 
 ## Guardrails
 
-- Default max cycles: 5 unless user overrides.
+- Max cycles: read from `.omi/state/config.json` (`loopLimits.autopilot` or `loopLimits.default`), fallback to 5 if not configured.
 - Do not hide blockers or failed verification.
 - Use `$cancel` or `/omi:stop` for graceful stop.
 

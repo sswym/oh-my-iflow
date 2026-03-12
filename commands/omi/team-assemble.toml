@@ -35,8 +35,8 @@ Protocol:
    - Run `team-plan -> team-prd -> team-exec -> team-verify -> team-fix`.
    - Repeat `team-exec -> team-verify -> team-fix` until criteria pass or blockers are explicit.
 8. If filesystem tools are available, write/update:
-   - `.iflow/state/team-assembly.md`
-   - `.iflow/state/workflow.md`
+   - `.omi/state/team-assembly.md`
+   - `.omi/state/workflow.md`
 
 Output format:
 ## Team Fit Analysis

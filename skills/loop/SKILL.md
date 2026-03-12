@@ -24,7 +24,7 @@ Use this skill when tasks are partially complete and must continue through stric
 ## Guardrails
 
 - No "done" claim with unresolved major/blocker findings.
-- Default max cycles per invocation: 3 (unless user overrides).
+- Max cycles per invocation: read from `.omi/state/config.json` (`loopLimits.speed` or `loopLimits.default`), fallback to 3 if not configured.
 
 ## Output Template
 

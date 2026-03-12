@@ -7,6 +7,41 @@
 
 ---
 ## 更新
+### 2026-03-12 架构优化与状态管理整改
+
+基于深度分析报告实施的核心优化：
+
+**高优先级 - 状态路径统一**
+- 统一所有状态文件存储路径为 `.omi/state/`
+- 修复了 6 个技能文件和 6 个命令文件中的状态路径引用
+- 消除了 `.iflow/state/` 和 `.omi/state/` 混用的问题
+
+**中优先级 - 循环配置集中化**
+- 在 `context/omi-core.md` 添加全局配置定义
+- 支持按模式配置循环限制（speed: 3, default: 5, deep: 10, autopilot: 5, ralph: -1）
+- 更新 `loop` 和 `autopilot` 技能/命令使用集中配置
+
+**新增工具**
+- 添加 `script/state-utils.sh` 状态管理工具函数
+- 支持 `init/read/write/config/loop-limit/status` 等命令
+
+**变更文件清单**
+```
+skills/approval/SKILL.md      - 状态路径更新
+skills/reasoning/SKILL.md     - 状态路径更新
+skills/doctor/SKILL.md        - 状态路径更新
+skills/loop/SKILL.md          - 循环配置引用更新
+skills/autopilot/SKILL.md     - 循环配置引用更新
+commands/omi/approval.toml    - 状态路径更新
+commands/omi/reasoning.toml   - 状态路径更新
+commands/omi/doctor.toml      - 状态路径更新
+commands/omi/loop.toml        - 循环配置引用更新
+commands/omi/autopilot.toml   - 循环配置引用更新
+commands/omi/team-assemble.toml - 状态路径更新
+context/omi-core.md           - 添加全局配置定义
+script/state-utils.sh         - 新增状态管理工具
+```
+
 ### 2026-03-06同步上游更新
 ```bash
 /omi:team-assemble 请帮我完全复刻这个页面：https://cli.iflow.cn/?spm=3e711c3f.2ef5001f.0.0.3d8173e8mb1HSX

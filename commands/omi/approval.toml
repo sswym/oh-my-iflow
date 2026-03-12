@@ -11,12 +11,12 @@ Protocol:
    - `suggest` (default): propose actions and require explicit approval for side effects
    - `auto`: auto-approve low-risk routine actions, escalate high-risk actions for approval
    - `full-auto`: proceed without routine confirmations, but still escalate destructive/high-risk operations
-3. If no value is provided, show current posture from `.iflow/state/approval.json` when available.
+3. If no value is provided, show current posture from `.omi/state/approval.json` when available.
 4. Apply guardrails by posture:
    - destructive operation checks
    - secret/credential handling checks
    - production-impact confirmation checks
-5. If filesystem tools are available, write/update `.iflow/state/approval.json`.
+5. If filesystem tools are available, write/update `.omi/state/approval.json`.
 6. Clarify boundary: this sets omi policy posture and does not directly reconfigure iFLOW CLI runtime approval flags.
 
 Suggested `approval.json` shape:

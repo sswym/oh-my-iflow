@@ -17,7 +17,7 @@ Use this skill to diagnose setup or workflow drift before starting autonomous or
 
 1. Select diagnostic scope (`status`, `team`, or `hooks`).
 2. Check extension assets and command/skill readiness.
-3. Check state integrity under `.iflow/state/` when available.
+3. Check state integrity under `.omi/state/` when available.
 4. Classify findings (`critical`, `major`, `minor`) and list actions.
 5. Recommend a safe next command to continue.
 

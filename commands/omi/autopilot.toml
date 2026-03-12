@@ -10,7 +10,7 @@ Autopilot protocol:
 2. Execute iterative cycles of `team-exec -> team-verify -> team-fix`.
 3. After each cycle, evaluate done criteria and blocker status.
 4. Stop when all acceptance criteria pass, when blocked, or when max cycles are reached.
-5. Default max cycles: 5 (override only if user explicitly requests).
+5. Max cycles: read from `.omi/state/config.json` (`loopLimits.autopilot` or `loopLimits.default`), fallback to 5 if not configured.
 
 State handling:
 - If filesystem tools are available, update `.omi/state/workflow.md` and `.omi/state/checkpoint.md`.

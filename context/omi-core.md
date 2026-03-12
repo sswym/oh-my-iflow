@@ -106,6 +106,55 @@ When filesystem tools are available, persist current workflow state:
 
 If these files do not exist, create them only when a mode/lifecycle command is explicitly requested.
 
+## Global Configuration
+
+Centralized configuration for omi runtime behavior. Persist in `.omi/state/config.json`:
+
+```json
+{
+  "loopLimits": {
+    "default": 5,
+    "speed": 3,
+    "deep": 10,
+    "autopilot": 5,
+    "ralph": -1
+  },
+  "stateDir": ".omi/state",
+  "memoryDir": ".omi/memory",
+  "rulesDir": ".omi/rules",
+  "hooksDir": ".omi/hooks"
+}
+```
+
+### Loop Limit Configuration
+
+| Mode | Max Cycles | Description |
+|------|------------|-------------|
+| `default` | 5 | Standard iteration limit |
+| `speed` | 3 | Faster cycles for simple tasks |
+| `deep` | 10 | Extended for complex analysis |
+| `autopilot` | 5 | Autonomous execution limit |
+| `ralph` | -1 | Unlimited until validation passes |
+
+### State Directory Structure
+
+```
+.omi/
+├── state/
+│   ├── config.json      # Global configuration
+│   ├── mode.json        # Current operating mode
+│   ├── workflow.md      # Workflow state
+│   ├── checkpoint.md    # Checkpoint records
+│   ├── intent.md        # Intent classification
+│   ├── hud.json         # HUD visibility profile
+│   ├── hooks.json       # Hook configuration
+│   ├── reasoning.json   # Reasoning effort profile
+│   └── approval.json    # Approval posture
+├── memory/              # Topic memory files
+├── rules/               # Rule packs
+└── hooks/               # Hook records
+```
+
 ## Safety Rails
 
 - Never claim completion without listing what was validated.

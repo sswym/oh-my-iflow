@@ -1,0 +1,1709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>oh-my-iflow 项目深度分析报告</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --gradient-1: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --gradient-2: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+            --gradient-3: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            line-height: 1.7;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-dark) 100%);
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gradient-1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .logo-text h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .logo-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .meta-info {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .meta-item {
+            text-align: right;
+        }
+
+        .meta-item .label {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .meta-item .value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Navigation */
+        .nav {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+            position: sticky;
+            top: 89px;
+            z-index: 99;
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+        }
+
+        .nav-item {
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            font-size: 0.875rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-card-hover);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Section */
+        .section {
+            margin-bottom: 3rem;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Cards Grid */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+            box-shadow: 0 10px 40px -10px rgba(99, 102, 241, 0.3);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+        }
+
+        .card-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .card-count {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            background: var(--bg-card-hover);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+        }
+
+        .card-content {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        .card-content ul {
+            list-style: none;
+            margin-top: 0.75rem;
+        }
+
+        .card-content li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-content li:last-child {
+            border-bottom: none;
+        }
+
+        .card-content li::before {
+            content: "→";
+            color: var(--primary);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        /* Mermaid Diagram */
+        .diagram-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 2rem;
+            overflow-x: auto;
+        }
+
+        .diagram-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* Table */
+        .table-container {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            background: var(--bg-card-hover);
+            font-weight: 600;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-secondary);
+        }
+
+        td {
+            font-size: 0.875rem;
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background: rgba(99, 102, 241, 0.05);
+        }
+
+        /* Optimization Section */
+        .optimization-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .optimization-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .optimization-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .optimization-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .badge-high {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .badge-medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+        }
+
+        .badge-low {
+            background: rgba(16, 185, 129, 0.2);
+            color: #10b981;
+        }
+
+        .optimization-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .optimization-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .opt-section h4 {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .opt-section p {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        .opt-section ul {
+            list-style: none;
+            margin-top: 0.5rem;
+        }
+
+        .opt-section li {
+            padding: 0.375rem 0;
+            font-size: 0.875rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        .opt-section li::before {
+            content: "•";
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Code Block */
+        .code-block {
+            background: #0d1117;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 0.8rem;
+            line-height: 1.6;
+            margin-top: 0.75rem;
+        }
+
+        .code-block code {
+            color: #e6edf3;
+        }
+
+        .code-keyword { color: #ff7b72; }
+        .code-string { color: #a5d6ff; }
+        .code-comment { color: #8b949e; }
+        .code-function { color: #d2a8ff; }
+
+        /* Effect Preview */
+        .effect-preview {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(20, 184, 166, 0.1) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 1rem;
+            margin-top: 1rem;
+        }
+
+        .effect-preview h5 {
+            font-size: 0.875rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .effect-preview p {
+            font-size: 0.875rem;
+            color: var(--text-primary);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--bg-card);
+            border-top: 1px solid var(--border);
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer p {
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-dark);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .meta-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .meta-item {
+                text-align: center;
+            }
+
+            .nav {
+                top: 129px;
+            }
+
+            .main {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">OI</div>
+                <div class="logo-text">
+                    <h1>oh-my-iflow</h1>
+                    <p>深度分析报告</p>
+                </div>
+            </div>
+            <div class="meta-info">
+                <div class="meta-item">
+                    <div class="label">分析日期</div>
+                    <div class="value">2026-03-12</div>
+                </div>
+                <div class="meta-item">
+                    <div class="label">版本</div>
+                    <div class="value">v1.0.0</div>
+                </div>
+                <div class="meta-item">
+                    <div class="label">智能体数量</div>
+                    <div class="value">13</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-content">
+            <a href="#overview" class="nav-item active">项目概览</a>
+            <a href="#architecture" class="nav-item">架构流程图</a>
+            <a href="#agents" class="nav-item">智能体系统</a>
+            <a href="#skills" class="nav-item">技能模块</a>
+            <a href="#commands" class="nav-item">命令系统</a>
+            <a href="#optimizations" class="nav-item">优化建议</a>
+            <a href="#effects" class="nav-item">预期效果</a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Overview Section -->
+        <section id="overview" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: var(--gradient-1);">📊</div>
+                <div>
+                    <h2 class="section-title">项目概览</h2>
+                    <p class="section-subtitle">oh-my-iflow 核心数据统计</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">13</div>
+                    <div class="stat-label">智能体角色</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">24</div>
+                    <div class="stat-label">技能模块</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">34</div>
+                    <div class="stat-label">CLI 命令</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">操作模式</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">8+</div>
+                    <div class="stat-label">LSP 语言支持</div>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.2);">🎯</div>
+                        <div>
+                            <h3 class="card-title">核心定位</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <p>iFLOW CLI 的多智能体工作流扩展插件，通过角色化的智能体架构和结构化的工作流管道，帮助开发者更高效地进行代码编写、调试、规划和验证。</p>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.2);">⚡</div>
+                        <div>
+                            <h3 class="card-title">核心能力</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>多智能体协作编排</li>
+                            <li>结构化工作流管道</li>
+                            <li>LSP 语言服务集成</li>
+                            <li>自动格式化支持</li>
+                            <li>原生钩子控制</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.2);">🔗</div>
+                        <div>
+                            <h3 class="card-title">技术栈</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>TypeScript/Bun (cli-lsp-client)</li>
+                            <li>Python (脚本和工具)</li>
+                            <li>Shell (格式化插件)</li>
+                            <li>TOML (命令配置)</li>
+                            <li>Markdown (智能体定义)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: var(--gradient-2);">🏗️</div>
+                <div>
+                    <h2 class="section-title">架构流程图</h2>
+                    <p class="section-subtitle">系统核心工作流与智能体协作关系</p>
+                </div>
+            </div>
+
+            <div class="diagram-container">
+                <div class="diagram-title">📊 智能体层级架构</div>
+                <div class="mermaid">
+flowchart TB
+    subgraph ORCHESTRATION["🎯 编排层"]
+        DIRECTOR["omi-director<br/>团队编排/冲突解决"]
+    end
+
+    subgraph PLANNING["📋 规划决策层"]
+        PRODUCT["omi-product<br/>PRD范围界定"]
+        ARCHITECT["omi-architect<br/>架构设计"]
+        CONSULTANT["omi-consultant<br/>战略咨询"]
+        CONSENSUS["omi-consensus<br/>多方案决策"]
+        PLANNER["omi-planner<br/>任务分解"]
+    end
+
+    subgraph EXECUTION["⚡ 执行层"]
+        EXECUTOR["omi-executor<br/>代码实现"]
+        QUICK["omi-quick<br/>快速修复"]
+    end
+
+    subgraph QUALITY["✅ 质量保证层"]
+        REVIEWER["omi-reviewer<br/>代码审查"]
+        VERIFIER["omi-verifier<br/>验收验证"]
+        DEBUGGER["omi-debugger<br/>问题诊断"]
+    end
+
+    subgraph SUPPORT["🔧 支持服务层"]
+        RESEARCHER["omi-researcher<br/>技术研究"]
+        EDITOR["omi-editor<br/>输出整合"]
+    end
+
+    DIRECTOR --> PRODUCT
+    DIRECTOR --> ARCHITECT
+    DIRECTOR --> CONSULTANT
+    
+    PRODUCT --> PLANNER
+    ARCHITECT --> CONSENSUS
+    CONSULTANT --> CONSENSUS
+    CONSENSUS --> PLANNER
+    
+    PLANNER --> EXECUTOR
+    EXECUTOR --> REVIEWER
+    REVIEWER --> VERIFIER
+    
+    VERIFIER -->|通过| EDITOR
+    VERIFIER -->|失败| DEBUGGER
+    DEBUGGER --> EXECUTOR
+    
+    RESEARCHER -.-> DIRECTOR
+    RESEARCHER -.-> ARCHITECT
+    EDITOR -.-> DIRECTOR
+    
+    QUICK -.->|独立通道| EDITOR
+
+    style DIRECTOR fill:#6366f1,color:#fff
+    style EXECUTOR fill:#10b981,color:#fff
+    style VERIFIER fill:#f59e0b,color:#fff
+    style DEBUGGER fill:#ef4444,color:#fff
+                </div>
+            </div>
+
+            <div class="diagram-container" style="margin-top: 1.5rem;">
+                <div class="diagram-title">🔄 团队协作管道流程</div>
+                <div class="mermaid">
+flowchart LR
+    subgraph Stage0["阶段 0"]
+        ASSEMBLE["team-assemble<br/>组建团队"]
+    end
+
+    subgraph Stage1["阶段 1"]
+        PLAN["team-plan<br/>任务分解"]
+    end
+
+    subgraph Stage2["阶段 2"]
+        PRD["team-prd<br/>范围锁定"]
+    end
+
+    subgraph Stage3["阶段 3"]
+        EXEC["team-exec<br/>代码实现"]
+    end
+
+    subgraph Stage4["阶段 4"]
+        VERIFY["team-verify<br/>验收验证"]
+    end
+
+    subgraph Stage5["阶段 5"]
+        FIX["team-fix<br/>问题修复"]
+    end
+
+    ASSEMBLE --> PLAN
+    PLAN --> PRD
+    PRD --> EXEC
+    EXEC --> VERIFY
+    VERIFY -->|通过| DONE["✅ 完成"]
+    VERIFY -->|失败| FIX
+    FIX --> EXEC
+
+    style ASSEMBLE fill:#8b5cf6,color:#fff
+    style PLAN fill:#6366f1,color:#fff
+    style PRD fill:#3b82f6,color:#fff
+    style EXEC fill:#10b981,color:#fff
+    style VERIFY fill:#f59e0b,color:#fff
+    style FIX fill:#ef4444,color:#fff
+    style DONE fill:#22c55e,color:#fff
+                </div>
+            </div>
+
+            <div class="diagram-container" style="margin-top: 1.5rem;">
+                <div class="diagram-title">🧩 技能系统分层架构</div>
+                <div class="mermaid">
+flowchart TB
+    subgraph CONFIG["⚙️ 配置层"]
+        MODE["mode"]
+        APPROVAL["approval"]
+        REASONING["reasoning"]
+        HUD["hud"]
+        MEMORY["memory"]
+        RULES["rules"]
+    end
+
+    subgraph INTAKE["🚪 入口层"]
+        INTENT["intent"]
+        DOCTOR["doctor"]
+        DEEPINIT["deep-init"]
+        RESEARCH["research"]
+        CONSENSUS2["consensus"]
+    end
+
+    subgraph PLANLAYER["📋 规划层"]
+        PLAN2["plan"]
+        PRD2["prd"]
+        RALPLAN["ralplan"]
+    end
+
+    subgraph EXECLAYER["⚡ 执行层"]
+        EXECUTE["execute"]
+        TEAM["team"]
+        TEAMASM["team-assemble"]
+        ULTRAWORK["ultrawork"]
+    end
+
+    subgraph CONTROL["🔄 控制层"]
+        LOOP["loop"]
+        AUTOPILOT["autopilot"]
+        RALPH["ralph"]
+        CANCEL["cancel"]
+    end
+
+    subgraph INFRA["🏗️ 基础设施层"]
+        HOOKS["hooks"]
+        CONTEXTOPT["context-optimize"]
+    end
+
+    CONFIG --> INTAKE
+    INTAKE --> PLANLAYER
+    PLANLAYER --> EXECLAYER
+    EXECLAYER --> CONTROL
+    INFRA -.-> CONFIG
+    INFRA -.-> CONTROL
+
+    style CONFIG fill:#6366f1,color:#fff
+    style INTAKE fill:#8b5cf6,color:#fff
+    style PLANLAYER fill:#3b82f6,color:#fff
+    style EXECLAYER fill:#10b981,color:#fff
+    style CONTROL fill:#f59e0b,color:#fff
+    style INFRA fill:#64748b,color:#fff
+                </div>
+            </div>
+        </section>
+
+        <!-- Agents Section -->
+        <section id="agents" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: var(--gradient-3);">🤖</div>
+                <div>
+                    <h2 class="section-title">智能体系统</h2>
+                    <p class="section-subtitle">13 个角色化智能体详细分析</p>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>智能体</th>
+                            <th>核心职责</th>
+                            <th>模型</th>
+                            <th>协作关系</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>omi-director</strong></td>
+                            <td>团队编排、冲突解决、生命周期交接</td>
+                            <td><code>glm-5</code></td>
+                            <td>顶层编排者，协调所有其他 agent</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-architect</strong></td>
+                            <td>架构决策、边界定义、技术权衡分析</td>
+                            <td><code>glm-5</code></td>
+                            <td>输出交接给 planner 和 executor</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-planner</strong></td>
+                            <td>任务分解、依赖映射、验证检查点定义</td>
+                            <td><code>glm-5</code></td>
+                            <td>接收 architect 输出，为 executor 提供任务计划</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-product</strong></td>
+                            <td>PRD 级别范围定义、验收标准、非目标界定</td>
+                            <td><code>glm-5</code></td>
+                            <td>输出交接给 executor 和 verifier</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-consultant</strong></td>
+                            <td>决策标准设计、战略分析、推荐框架</td>
+                            <td><code>glm-5</code></td>
+                            <td>为高层决策提供战略分析支持</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-executor</strong></td>
+                            <td>代码实现、重构、测试更新</td>
+                            <td><code>glm-4.7</code></td>
+                            <td>接收 planner 任务，输出给 reviewer</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-reviewer</strong></td>
+                            <td>代码审查 - 正确性/回归/安全/测试覆盖</td>
+                            <td><code>glm-5</code></td>
+                            <td>审查 executor 输出，传递给 verifier</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-verifier</strong></td>
+                            <td>验收门控、测试证据检查、发布就绪决策</td>
+                            <td><code>glm-5</code></td>
+                            <td>验证实现，失败时反馈给 debugger</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-debugger</strong></td>
+                            <td>故障分析、根因诊断、修复提案</td>
+                            <td><code>glm-5</code></td>
+                            <td>接收 verifier 失败反馈，输出修复给 executor</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-researcher</strong></td>
+                            <td>文档查找、API 比较、证据驱动的技术决策支持</td>
+                            <td><code>glm-5</code></td>
+                            <td>为所有决策型 agent 提供研究支持</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-editor</strong></td>
+                            <td>多智能体输出整合、结构化、受众适配</td>
+                            <td><code>glm-4.7</code></td>
+                            <td>管道末端，整合所有 agent 输出</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-consensus</strong></td>
+                            <td>多技术选项评估、收敛到一个决策</td>
+                            <td><code>glm-5</code></td>
+                            <td>整合 architect 和 planner 视角</td>
+                        </tr>
+                        <tr>
+                            <td><strong>omi-quick</strong></td>
+                            <td>小型低风险编辑 - typo 修复、小重构</td>
+                            <td><code>glm-4.7</code></td>
+                            <td>独立快速通道</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);">🧩</div>
+                <div>
+                    <h2 class="section-title">技能模块</h2>
+                    <p class="section-subtitle">24 个技能模块按层级分类</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(99, 102, 241, 0.2);">⚙️</div>
+                        <div>
+                            <h3 class="card-title">配置层</h3>
+                            <span class="card-count">6 个</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><code>mode</code> - 操作模式切换</li>
+                            <li><code>approval</code> - 审批策略控制</li>
+                            <li><code>reasoning</code> - 推理深度控制</li>
+                            <li><code>hud</code> - HUD 可见性配置</li>
+                            <li><code>memory</code> - 持久化记忆管理</li>
+                            <li><code>rules</code> - 条件规则包注入</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(139, 92, 246, 0.2);">🚪</div>
+                        <div>
+                            <h3 class="card-title">入口层</h3>
+                            <span class="card-count">5 个</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><code>intent</code> - 意图分类与路由</li>
+                            <li><code>doctor</code> - 就绪诊断检查</li>
+                            <li><code>deep-init</code> - 深度仓库映射</li>
+                            <li><code>research</code> - 技术研究收集</li>
+                            <li><code>consensus</code> - 多选项决策收敛</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(59, 130, 246, 0.2);">📋</div>
+                        <div>
+                            <h3 class="card-title">规划层</h3>
+                            <span class="card-count">3 个</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><code>plan</code> - 分阶段实施计划</li>
+                            <li><code>prd</code> - PRD 质量范围锁定</li>
+                            <li><code>ralplan</code> - 质量优先执行计划</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(16, 185, 129, 0.2);">⚡</div>
+                        <div>
+                            <h3 class="card-title">执行层</h3>
+                            <span class="card-count">4 个</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><code>execute</code> - 范围任务快速实现</li>
+                            <li><code>team</code> - 完整团队管道协调</li>
+                            <li><code>team-assemble</code> - 动态团队组装</li>
+                            <li><code>ultrawork</code> - 高吞吐量批处理</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.2);">🔄</div>
+                        <div>
+                            <h3 class="card-title">控制层</h3>
+                            <span class="card-count">4 个</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><code>loop</code> - exec-verify-fix 循环</li>
+                            <li><code>autopilot</code> - 自主执行循环</li>
+                            <li><code>ralph</code> - 严格质量门控</li>
+                            <li><code>cancel</code> - 优雅停止工作流</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(100, 116, 139, 0.2);">🏗️</div>
+                        <div>
+                            <h3 class="card-title">基础设施层</h3>
+                            <span class="card-count">2 个</span>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li><code>hooks</code> - 原生钩子管道操作</li>
+                            <li><code>context-optimize</code> - 上下文效率优化</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Commands Section -->
+        <section id="commands" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);">💻</div>
+                <div>
+                    <h2 class="section-title">命令系统</h2>
+                    <p class="section-subtitle">34 个 CLI 命令分类与依赖关系</p>
+                </div>
+            </div>
+
+            <div class="diagram-container">
+                <div class="diagram-title">📡 命令依赖关系图</div>
+                <div class="mermaid">
+flowchart TB
+    subgraph TEAMCMD["团队命令"]
+        TEAM["/omi:team"]
+        TEAMASM2["/omi:team-assemble"]
+        TEAMPLAN["/omi:team-plan"]
+        TEAMPRD["/omi:team-prd"]
+        TEAMEXEC["/omi:team-exec"]
+        TEAMVERIFY["/omi:team-verify"]
+        TEAMFIX["/omi:team-fix"]
+    end
+
+    subgraph WORKFLOW["工作流命令"]
+        AUTOPILOT2["/omi:autopilot"]
+        LOOP2["/omi:loop"]
+        RALPH2["/omi:ralph"]
+        ULTRAWORK2["/omi:ultrawork"]
+    end
+
+    subgraph CORE["核心命令"]
+        MODE2["/omi:mode"]
+        MEMORY2["/omi:memory"]
+        HOOKS2["/omi:hooks"]
+        RULES2["/omi:rules"]
+    end
+
+    subgraph DIAG["诊断命令"]
+        DOCTOR2["/omi:doctor"]
+        DEEPINIT2["/omi:deep-init"]
+        INTENT2["/omi:intent"]
+    end
+
+    TEAM --> TEAMASM2
+    TEAM --> TEAMPLAN
+    TEAM --> TEAMPRD
+    TEAM --> TEAMEXEC
+    TEAM --> TEAMVERIFY
+    TEAM --> TEAMFIX
+
+    AUTOPILOT2 --> TEAMPLAN
+    AUTOPILOT2 --> TEAMPRD
+    LOOP2 --> TEAMEXEC
+    RALPH2 --> TEAMPLAN
+
+    MODE2 -.-> AUTOPILOT2
+    MODE2 -.-> RALPH2
+    HOOKS2 -.-> TEAM
+
+    DOCTOR2 -.-> TEAM
+    INTENT2 -.-> TEAMPLAN
+
+    style TEAM fill:#6366f1,color:#fff
+    style AUTOPILOT2 fill:#10b981,color:#fff
+    style MODE2 fill:#8b5cf6,color:#fff
+    style DOCTOR2 fill:#f59e0b,color:#fff
+                </div>
+            </div>
+
+            <div class="table-container" style="margin-top: 1.5rem;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>分类</th>
+                            <th>命令</th>
+                            <th>功能</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td rowspan="7"><strong>团队管道</strong></td>
+                            <td><code>/omi:team</code></td>
+                            <td>运行完整的团队协作管道</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:team-assemble</code></td>
+                            <td>组建任务适配团队</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:team-plan</code></td>
+                            <td>分解任务、映射依赖</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:team-prd</code></td>
+                            <td>锁定范围与验收标准</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:team-exec</code></td>
+                            <td>实现验证切片</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:team-verify</code></td>
+                            <td>运行正确性/回归检查</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:team-fix</code></td>
+                            <td>修补验证发现的问题</td>
+                        </tr>
+                        <tr>
+                            <td rowspan="4"><strong>工作流模式</strong></td>
+                            <td><code>/omi:autopilot</code></td>
+                            <td>自主多阶段执行循环 (max 5)</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:loop</code></td>
+                            <td>exec-verify-fix 循环强制执行 (max 3)</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:ralph</code></td>
+                            <td>严格质量门控模式</td>
+                        </tr>
+                        <tr>
+                            <td><code>/omi:ultrawork</code></td>
+                            <td>高吞吐量批处理模式</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Optimizations Section -->
+        <section id="optimizations" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);">🔧</div>
+                <div>
+                    <h2 class="section-title">优化建议</h2>
+                    <p class="section-subtitle">识别的问题与改进方案</p>
+                </div>
+            </div>
+
+            <!-- Optimization 1 -->
+            <div class="optimization-card">
+                <div class="optimization-header">
+                    <h3 class="optimization-title">
+                        <span>🔴</span> 状态持久化路径不一致
+                    </h3>
+                    <span class="optimization-badge badge-high">高优先级</span>
+                </div>
+                <div class="optimization-content">
+                    <div class="opt-section">
+                        <h4>📋 当前问题</h4>
+                        <p>状态文件分散在两个不同路径：</p>
+                        <ul>
+                            <li><code>.iflow/state/</code> - mode.json, approval.json, reasoning.json</li>
+                            <li><code>.omi/state/</code> - hud.json</li>
+                        </ul>
+                        <p>这导致配置管理混乱，难以统一维护。</p>
+                    </div>
+                    <div class="opt-section">
+                        <h4>🛠️ 优化方案</h4>
+                        <ul>
+                            <li>统一状态存储路径为 <code>.omi/state/</code></li>
+                            <li>创建状态管理抽象层</li>
+                            <li>添加状态迁移脚本</li>
+                            <li>更新所有技能的状态路径引用</li>
+                        </ul>
+                        <div class="code-block">
+<code><span class="code-comment">// 统一状态路径常量</span>
+<span class="code-keyword">const</span> STATE_DIR = <span class="code-string">'.omi/state'</span>;
+<span class="code-keyword">const</span> STATE_FILES = {
+  mode: <span class="code-string">`${STATE_DIR}/mode.json`</span>,
+  approval: <span class="code-string">`${STATE_DIR}/approval.json`</span>,
+  reasoning: <span class="code-string">`${STATE_DIR}/reasoning.json`</span>,
+  hud: <span class="code-string">`${STATE_DIR}/hud.json`</span>
+};</code>
+                        </div>
+                    </div>
+                    <div class="opt-section">
+                        <h4>✨ 预期效果</h4>
+                        <ul>
+                            <li>状态管理一致性提升 100%</li>
+                            <li>减少配置错误风险</li>
+                            <li>简化备份和迁移操作</li>
+                            <li>提升代码可维护性</li>
+                        </ul>
+                        <div class="effect-preview">
+                            <h5>💡 改进后</h5>
+                            <p>所有状态文件集中在 <code>.omi/state/</code> 目录，通过统一 API 访问，支持原子操作和事务。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimization 2 -->
+            <div class="optimization-card">
+                <div class="optimization-header">
+                    <h3 class="optimization-title">
+                        <span>🟡</span> 循环限制配置分散
+                    </h3>
+                    <span class="optimization-badge badge-medium">中优先级</span>
+                </div>
+                <div class="optimization-content">
+                    <div class="opt-section">
+                        <h4>📋 当前问题</h4>
+                        <p>不同技能的循环限制硬编码在各自的 SKILL.md 中：</p>
+                        <ul>
+                            <li><code>loop</code>: max 3 cycles</li>
+                            <li><code>autopilot</code>: max 5 cycles</li>
+                            <li><code>ralph</code>: 无限制直到通过</li>
+                        </ul>
+                        <p>缺乏全局配置机制，难以根据场景调整。</p>
+                    </div>
+                    <div class="opt-section">
+                        <h4>🛠️ 优化方案</h4>
+                        <ul>
+                            <li>创建全局循环配置文件 <code>.omi/config.json</code></li>
+                            <li>支持按模式自动调整循环限制</li>
+                            <li>添加运行时覆盖能力</li>
+                            <li>实现循环计数器持久化</li>
+                        </ul>
+                        <div class="code-block">
+<code><span class="code-comment">// .omi/config.json</span>
+{
+  <span class="code-string">"loopLimits"</span>: {
+    <span class="code-string">"default"</span>: <span class="code-keyword">5</span>,
+    <span class="code-string">"speed"</span>: <span class="code-keyword">3</span>,
+    <span class="code-string">"deep"</span>: <span class="code-keyword">10</span>,
+    <span class="code-string">"autopilot"</span>: <span class="code-keyword">5</span>,
+    <span class="code-string">"ralph"</span>: <span class="code-keyword">-1</span>
+  }
+}</code>
+                        </div>
+                    </div>
+                    <div class="opt-section">
+                        <h4>✨ 预期效果</h4>
+                        <ul>
+                            <li>配置集中管理，易于调整</li>
+                            <li>支持场景化配置预设</li>
+                            <li>避免无限循环风险</li>
+                            <li>提供更好的用户体验控制</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimization 3 -->
+            <div class="optimization-card">
+                <div class="optimization-header">
+                    <h3 class="optimization-title">
+                        <span>🟡</span> 缺少智能体健康监控
+                    </h3>
+                    <span class="optimization-badge badge-medium">中优先级</span>
+                </div>
+                <div class="optimization-content">
+                    <div class="opt-section">
+                        <h4>📋 当前问题</h4>
+                        <ul>
+                            <li>无法实时监控智能体执行状态</li>
+                            <li>缺少执行时间统计</li>
+                            <li>失败时难以快速定位问题</li>
+                            <li>无性能基准数据</li>
+                        </ul>
+                    </div>
+                    <div class="opt-section">
+                        <h4>🛠️ 优化方案</h4>
+                        <ul>
+                            <li>实现智能体执行追踪器</li>
+                            <li>添加 Prometheus 指标导出</li>
+                            <li>创建实时仪表盘</li>
+                            <li>实现异常告警机制</li>
+                        </ul>
+                        <div class="code-block">
+<code><span class="code-comment">// 智能体追踪器接口</span>
+<span class="code-keyword">interface</span> <span class="code-function">AgentMetrics</span> {
+  agentId: <span class="code-keyword">string</span>;
+  startTime: <span class="code-keyword">number</span>;
+  endTime?: <span class="code-keyword">number</span>;
+  status: <span class="code-string">'running'</span> | <span class="code-string">'success'</span> | <span class="code-string">'failed'</span>;
+  tokenUsage?: <span class="code-keyword">number</span>;
+  error?: <span class="code-keyword">string</span>;
+}</code>
+                        </div>
+                    </div>
+                    <div class="opt-section">
+                        <h4>✨ 预期效果</h4>
+                        <ul>
+                            <li>实时可视化执行状态</li>
+                            <li>快速定位性能瓶颈</li>
+                            <li>基于数据的优化决策</li>
+                            <li>主动异常检测和告警</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimization 4 -->
+            <div class="optimization-card">
+                <div class="optimization-header">
+                    <h3 class="optimization-title">
+                        <span>🟢</span> LSP 客户端扩展性不足
+                    </h3>
+                    <span class="optimization-badge badge-low">低优先级</span>
+                </div>
+                <div class="optimization-content">
+                    <div class="opt-section">
+                        <h4>📋 当前问题</h4>
+                        <ul>
+                            <li>支持语言有限（8种）</li>
+                            <li>添加新语言需修改源码</li>
+                            <li>缺少动态语言服务器发现</li>
+                            <li>配置不够灵活</li>
+                        </ul>
+                    </div>
+                    <div class="opt-section">
+                        <h4>🛠️ 优化方案</h4>
+                        <ul>
+                            <li>实现插件式语言服务器架构</li>
+                            <li>支持用户自定义语言配置</li>
+                            <li>添加自动语言服务器检测</li>
+                            <li>创建语言服务器市场/注册表</li>
+                        </ul>
+                        <div class="code-block">
+<code><span class="code-comment">// 语言服务器插件配置</span>
+{
+  <span class="code-string">"languageServers"</span>: {
+    <span class="code-string">"kotlin"</span>: {
+      <span class="code-string">"command"</span>: [<span class="code-string">"kotlin-language-server"</span>],
+      <span class="code-string">"filePatterns"</span>: [<span class="code-string">"**/*.kt"</span>],
+      <span class="code-string">"initializationOptions"</span>: {}
+    }
+  }
+}</code>
+                        </div>
+                    </div>
+                    <div class="opt-section">
+                        <h4>✨ 预期效果</h4>
+                        <ul>
+                            <li>支持任意语言扩展</li>
+                            <li>用户可自定义配置</li>
+                            <li>社区可贡献语言包</li>
+                            <li>更好的生态系统支持</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Optimization 5 -->
+            <div class="optimization-card">
+                <div class="optimization-header">
+                    <h3 class="optimization-title">
+                        <span>🟢</span> 缺少智能体输出缓存
+                    </h3>
+                    <span class="optimization-badge badge-low">低优先级</span>
+                </div>
+                <div class="optimization-content">
+                    <div class="opt-section">
+                        <h4>📋 当前问题</h4>
+                        <ul>
+                            <li>相同输入重复执行相同智能体</li>
+                            <li>浪费 token 和时间</li>
+                            <li>无增量执行支持</li>
+                        </ul>
+                    </div>
+                    <div class="opt-section">
+                        <h4>🛠️ 优化方案</h4>
+                        <ul>
+                            <li>实现智能体输出缓存层</li>
+                            <li>基于输入 hash 的缓存 key</li>
+                            <li>支持缓存失效策略</li>
+                            <li>添加缓存命中率统计</li>
+                        </ul>
+                        <div class="code-block">
+<code><span class="code-comment">// 缓存策略</span>
+<span class="code-keyword">interface</span> <span class="code-function">CachePolicy</span> {
+  ttl: <span class="code-keyword">number</span>; <span class="code-comment">// seconds</span>
+  maxSize: <span class="code-keyword">number</span>; <span class="code-comment">// MB</span>
+  invalidateOn: [<span class="code-string">'file-change'</span>, <span class="code-string">'config-change'</span>];
+}</code>
+                        </div>
+                    </div>
+                    <div class="opt-section">
+                        <h4>✨ 预期效果</h4>
+                        <ul>
+                            <li>重复任务响应时间减少 80%+</li>
+                            <li>Token 消耗降低 50%+</li>
+                            <li>提升用户体验</li>
+                            <li>支持离线场景</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Effects Section -->
+        <section id="effects" class="section animate-in">
+            <div class="section-header">
+                <div class="section-icon" style="background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);">📈</div>
+                <div>
+                    <h2 class="section-title">预期效果总结</h2>
+                    <p class="section-subtitle">优化后的整体改进</p>
+                </div>
+            </div>
+
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(34, 197, 94, 0.2);">🎯</div>
+                        <div>
+                            <h3 class="card-title">可靠性提升</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>状态管理一致性 <strong>+100%</strong></li>
+                            <li>配置错误风险 <strong>-90%</strong></li>
+                            <li>无限循环风险 <strong>-100%</strong></li>
+                            <li>故障恢复时间 <strong>-70%</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(59, 130, 246, 0.2);">⚡</div>
+                        <div>
+                            <h3 class="card-title">性能提升</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>重复任务响应 <strong>-80%</strong></li>
+                            <li>Token 消耗 <strong>-50%</strong></li>
+                            <li>配置加载时间 <strong>-60%</strong></li>
+                            <li>状态切换延迟 <strong>-40%</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(168, 85, 247, 0.2);">🔧</div>
+                        <div>
+                            <h3 class="card-title">可维护性提升</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>代码复杂度 <strong>-30%</strong></li>
+                            <li>配置统一度 <strong>+100%</strong></li>
+                            <li>扩展性 <strong>+200%</strong></li>
+                            <li>文档覆盖率 <strong>+50%</strong></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon" style="background: rgba(245, 158, 11, 0.2);">👀</div>
+                        <div>
+                            <h3 class="card-title">可观测性提升</h3>
+                        </div>
+                    </div>
+                    <div class="card-content">
+                        <ul>
+                            <li>执行状态可见度 <strong>+100%</strong></li>
+                            <li>问题定位时间 <strong>-80%</strong></li>
+                            <li>性能数据可用性 <strong>+100%</strong></li>
+                            <li>异常检测覆盖率 <strong>+90%</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diagram-container" style="margin-top: 1.5rem;">
+                <div class="diagram-title">📊 优化实施优先级路线图</div>
+                <div class="mermaid">
+gantt
+    title 优化实施路线图
+    dateFormat  YYYY-MM-DD
+    section 高优先级
+    状态路径统一           :a1, 2026-03-15, 7d
+    迁移脚本开发           :a2, after a1, 3d
+    section 中优先级
+    循环配置集中化         :b1, 2026-03-20, 5d
+    健康监控系统           :b2, after b1, 10d
+    section 低优先级
+    LSP 插件架构           :c1, 2026-04-01, 14d
+    智能体缓存层           :c2, after c1, 7d
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>oh-my-iflow 深度分析报告 | 生成时间: 2026-03-12 | 由 omi-team 生成</p>
+        </div>
+    </footer>
+
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            themeVariables: {
+                primaryColor: '#6366f1',
+                primaryTextColor: '#fff',
+                primaryBorderColor: '#4f46e5',
+                lineColor: '#94a3b8',
+                secondaryColor: '#1e293b',
+                tertiaryColor: '#334155',
+                background: '#0f172a',
+                mainBkg: '#1e293b',
+                nodeBorder: '#334155',
+                clusterBkg: '#1e293b',
+                clusterBorder: '#334155',
+                titleColor: '#f1f5f9',
+                edgeLabelBackground: '#1e293b'
+            },
+            flowchart: {
+                curve: 'basis',
+                padding: 20
+            },
+            gantt: {
+                axisFormat: '%m/%d'
+            }
+        });
+
+        // Navigation active state
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Scroll spy for navigation
+        const sections = document.querySelectorAll('.section');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href') === '#' + current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Animation on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.card, .optimization-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.5s ease';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>

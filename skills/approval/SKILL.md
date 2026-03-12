@@ -23,7 +23,7 @@ Use this skill to control how aggressively omi runs autonomous actions versus as
 
 1. Identify requested approval posture.
 2. Explain side-effect and high-risk confirmation behavior for the selected mode.
-3. Persist/update `.iflow/state/approval.json` when filesystem tools are available.
+3. Persist/update `.omi/state/approval.json` when filesystem tools are available.
 4. Clarify that runtime approval flags remain host-CLI concerns.
 
 ## Output Template

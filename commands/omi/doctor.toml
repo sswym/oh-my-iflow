@@ -16,14 +16,14 @@ Diagnostic protocol:
    - key directories (`agents`, `commands/omi`, `skills`, `context`)
    - key manifest/context files (`settings.json`, `context/omi-core.md`)
 3. Verify command-skill readiness for core flows (`team`, `intent`, `loop`, `rules`, `memory`, `hooks`, `reasoning`, `approval`).
-4. Check state artifacts and drift risks under `.iflow/state/` when available.
+4. Check state artifacts and drift risks under `.omi/state/` when available.
 5. Detect common failure patterns:
    - extension not loaded in current session
    - command discovery mismatch
    - stale/missing state files
    - hook safety policy gaps for autonomous loops
 6. Produce concrete remediation actions in priority order.
-7. If filesystem tools are available, write/update `.iflow/state/doctor.md`.
+7. If filesystem tools are available, write/update `.omi/state/doctor.md`.
 
 Output format:
 ## Doctor Result

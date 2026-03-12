@@ -24,7 +24,7 @@ Use this skill to set an explicit reasoning posture before planning, execution, 
 
 1. Identify requested effort or infer `medium` as default.
 2. Explain impact on planning depth, verification strictness, and cost/latency.
-3. Persist/update `.iflow/state/reasoning.json` when filesystem tools are available.
+3. Persist/update `.omi/state/reasoning.json` when filesystem tools are available.
 4. Recommend a next command (`/omi:mode`, `/omi:team`, or `/omi:loop`) based on posture.
 
 ## Output Template
